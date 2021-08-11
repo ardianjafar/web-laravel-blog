@@ -27,4 +27,12 @@ class BlogController extends Controller
         $category = Category::all();
         return view('frontend.single-page',compact('post','category'));
     }
+
+    public function related($category)
+    {
+        # code...
+        $category = Category::where('category', $category)->get();
+        $post = Post::where('category', $category)->get();
+        return view('frontend.sing');
+    }
 }

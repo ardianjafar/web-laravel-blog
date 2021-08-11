@@ -107,7 +107,7 @@
                 <tr data-widget="expandable-table" aria-expanded="false">
                 <td>{{ $item + $posts->firstitem() }}</td>
                 <td>{{ $hasil->user->name }}</td>
-                {{-- <td>{{ $hasil->categories->name }}</td> --}}
+                <td>{{ $hasil->categories->name }}</td>
                 <td>{{ $hasil->created_at }}</td>
                 <td>{{ $hasil->slug }} <a href="#">Read More</a></td>
                 <td>

@@ -29,8 +29,7 @@
         <tbody>
           @foreach ($users as $user => $result)    
           <tr>
-            {{-- <td>{{ $user + $users->firstitem() }}</td> --}}
-            <td>1</td>
+            <td>{{ $user + $users->firstitem() }}</td>
             <td>{{ $result->name }}</td>
             <td>{{ $result->email }}</td>
             <td>

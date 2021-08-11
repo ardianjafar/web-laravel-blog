@@ -18,7 +18,7 @@ class HomeController extends Controller
     public function index()
     {
         return view('admin.dashboard', [
-            'users' => User::get(),
+            'users' => User::paginate(10),
             'total_post' => Post::count('id'),
             'total_users' => User::count('id'),
             'total_category' => Category::count('id'),

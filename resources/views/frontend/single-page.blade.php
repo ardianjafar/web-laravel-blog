@@ -148,59 +148,6 @@
                                 </div>
                             </div>
                             
-                          
-                            
-                            <div class="sidebar-widget">
-                                <div class="tab-news">
-                                    <ul class="nav nav-pills nav-justified">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="pill" href="#featured">Featured</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-toggle="pill" href="#popular">Popular</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-toggle="pill" href="#latest">Latest</a>
-                                        </li>
-                                    </ul>
-
-                                    <div class="tab-content">
-                                        <div id="featured" class="container tab-pane active">
-                                            <div class="tn-news">
-                                                <div class="tn-img">
-                                                    <img src="{{ asset('bootstrap/img/news-350x223-1.jpg') }}" />
-                                                </div>
-                                                <div class="tn-title">
-                                                    <a href="">Lorem ipsum dolor sit amet consec adipis elit</a>
-                                                </div>
-                                            </div> 
-                                        </div>
-                                        <div id="popular" class="container tab-pane fade">
-                                            <div class="tn-news">
-                                                <div class="tn-img">
-                                                    <img src="{{ asset('bootstrap/img/news-350x223-4.jpg') }}" />
-                                                </div>
-                                                <div class="tn-title">
-                                                    <a href="">Lorem ipsum dolor sit amet consec adipis elit</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="latest" class="container tab-pane fade">
-                                            <div class="tn-news">
-                                                <div class="tn-img">
-                                                    <img src="{{ asset('bootstrap/img/news-350x223-3.jpg') }}" />
-                                                </div>
-                                                <div class="tn-title">
-                                                    <a href="">Lorem ipsum dolor sit amet consec adipis elit</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                         
-
                             <div class="sidebar-widget">
                                 <h2 class="sw-title">News Category</h2>
                                 <div class="category">

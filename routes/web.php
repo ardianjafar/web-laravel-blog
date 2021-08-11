@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/',[BlogController::class,'index'])->name('index');
 Route::get('single-page',[BlogController::class,'show'])->name('single-page');
 Route::get('blog/{slug}', [BlogController::class,'detail'])->name('blog.post');
+Route::get('blog/{category}',[BlogController::class,'related'])->name('post.related');
 // Authentication
 Auth::routes(['verify' => true]);
 

@@ -20,6 +20,11 @@
     <section class="content">
       <div class="row">
         <div class="col-md-12">
+          @if (Session::has('success'))
+              <div class="alert alert-success" role="alert">
+                {{ Session('success') }}
+              </div>
+          @endif
           <div class="card card-primary">
             <div class="card-header">
               <h3 class="card-title">General</h3>

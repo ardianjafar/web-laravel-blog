@@ -103,17 +103,17 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-2">
-                    <a href="{{ asset('storage/thumbnail/unsplash.jpg') }}" data-toggle="lightbox" data-title="sample 1 - white" data-gallery="gallery">
+                    <a href="{{ asset('storage/thumbnail/unsplash.jpg') }}" data-toggle="lightbox" data-title=" 1 - white" data-gallery="gallery">
                       <img src="{{ asset('storage/thumbnail/unsplash.jpg') }}" class="img-fluid mb-2" alt="white sample"/>
                     </a>
                   </div>
                   <div class="col-sm-2">
-                    <a href="{{ asset('storage/thumbnail/1.jpeg') }}" data-toggle="lightbox" data-title="sample 2 - black" data-gallery="gallery">
+                    <a href="{{ asset('storage/thumbnail/1.jpeg') }}" data-toggle="lightbox" data-title=" 2 - black" data-gallery="gallery">
                       <img src="{{ asset('storage/thumbnail/1.jpeg') }}" class="img-fluid mb-2" alt="black sample"/>
                     </a>
                   </div>
                   <div class="col-sm-2">
-                    <a href="{{ asset('storage/thumbnail/ .jpeg') }}" data-toggle="lightbox" data-title="sample 3 - red" data-gallery="gallery">
+                    <a href="{{ asset('storage/thumbnail/ .jpeg') }}" data-toggle="lightbox" data-title=" 3 - red" data-gallery="gallery">
                       <img src="{{ asset('storage/thumbnail/1.jpeg') }}" class="img-fluid mb-2" alt="red sample"/>
                     </a>
                   </div>

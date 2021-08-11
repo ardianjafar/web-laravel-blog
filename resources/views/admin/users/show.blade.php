@@ -123,15 +123,13 @@
                 <td>{{ $result->name }}</td>
                 <td>{{ $result->email }}</td>
                 <td>
-                  <span class="badge badge-danger">
                      @if ($result->type == 1)
-                         Super Admin
+                     <span class="badge badge-primary">Super Admin</span>
                      @else 
-                        Admin
+                     <span class="badge badge-danger">Admin</span>
                      @endif
-                  </span>
                 </td>
-                <td>{{ $result->created_at }}</td>
+                <td>{{ $result->created_at->diffForHumans() }}</td>
                 <td>
                   <form action="{{ route('user.destroy', $result->id) }}" method="post">
                     @csrf

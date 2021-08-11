@@ -64,7 +64,7 @@ class UserController extends Controller
             'photo_profile' => $image,
         ]);
 
-        return back()->with('success','Data berhasil di tambahkan');
+        return redirect()->route('user.index')->with('success','Data berhasil di tambahkan');
     }
 
     /**
