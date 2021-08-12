@@ -8,9 +8,9 @@ use App\Models\Post;
 
 class BlogController extends Controller
 {
-    public function index()
+    public function index(Category $category)
     {
-        $posts = Post::all();
+        $posts = Post::latest()->get();
         $category  = Category::all();
         return view('frontend.index',compact('posts','category'));
     }
