@@ -16,7 +16,7 @@
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
-  @include('layouts.admin.navbar')
+  @include('template.backend.navbar')
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
@@ -52,7 +52,7 @@
       </div>
 
       <!-- Sidebar Menu -->
-      @include('layouts.admin.nav')
+      @include('template.backend.sidebar')
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
@@ -70,7 +70,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Blank Page</li>
+              <li class="breadcrumb-item active">Blank Dancok</li>
             </ol>
           </div>
         </div>
@@ -156,7 +156,7 @@
   </div>
   <!-- /.content-wrapper -->
 
-  @include('layouts.admin.footer')
+  @include('template.backend.footer')
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">

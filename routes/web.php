@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\{BlogController, 
-                          PostController,
-                          CategoryController,
-                          HomeController,
-                          UserController,
-                          GalleryController};
+use App\Http\Controllers\Admin\{  Post\PostController,
+                                  Category\CategoryController,
+                                  Users\UsersController,
+                                  Gallery\GalleryController
+                            };
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,51 +18,49 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Front End
-Route::get('/',[BlogController::class,'index'])->name('index');
-Route::get('single-page',[BlogController::class,'show'])->name('single-page');
-Route::get('blog/{slug}', [BlogController::class,'detail'])->name('blog.post');
-Route::get('list-blog', [BlogController::class,'list-blog'])->name('blog.list');
-// Route::get('blog/{category}',[BlogController::class,'related'])->name('post.related');
-// Authentication
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
 Auth::routes(['verify' => true]);
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(['middleware' => 'verified','auth'],  function(){ 
     /*
-        -> CRUD Category
-        -> SoftDelete Category 
+        -> CRUD POST
+        -> SOFT DELETE POST
     */ 
     Route::get('post/trashed',[PostController::class,'trashed'])->name('post.trashed');
     Route::resource('post', PostController::class);
     Route::get('post/restore/{id}',[PostController::class,'restore'])->name('post.restore');
     Route::delete('post/delete/{id}',[PostController::class,'delete'])->name('post.delete');
-    
+
+
     /*
-        -> CRUD Category
-        -> SoftDelete Category 
+        -> CRUD CATEGORY
+        -> SOFT DELETE CATEGORY
     */ 
     Route::get('category/trashed',[CategoryController::class,'trashed'])->name('category.trashed');
     Route::resource('category', CategoryController::class);
+    Route::get('cobasaja',[CategoryController::class,'index3']);
     Route::get('category/restore/{id}',[CategoryController::class,'restore'])->name('category.restore');
     Route::delete('category/delete/{id}',[CategoryController::class,'delete'])->name('category.delete');
     
-    Route::resource('user', UserController::class);
-    Route::get('/dashboard', [HomeController::class, 'index'])->name('post.dashboard');
-
     /*
-        -> Image List
+        -> USERS
     */ 
-    Route::get('gallery', [GalleryController::class,'index'])->name('photos');
+    Route::resource('user', UsersController::class);
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+    /*
+        -> Gallery
+    */
+
+    Route::get('gallery', [GalleryController::class,'index'])->name('gallery');
+    Route::get('image', [GalleryController::class,'image']);
+    Route::get('file', [GalleryController::class,'file']);
+   
+    });
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
 });
-
-
-// Route::view('coba', 'admin.users.verified-email')->middleware('verified');
-
-
-// Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
-//     \UniSharp\LaravelFilemanager\Lfm::routes();
-// });
-
-
-
-

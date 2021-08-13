@@ -17,6 +17,8 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper mt-3">
     <!-- Main content -->
+
+    <!-- Main content -->
     <section class="content">
 
       <!-- Default box -->
@@ -41,54 +43,23 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Penulis</th>
                 <th>Cateogry</th>
-                <th>Title</th>
-                <th>Created at</th>
-                <th></th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-                @forelse ($post as $item => $result)   
+                @forelse ($category as $item => $result)   
                 <tr data-widget="expandable-table" aria-expanded="false">
-                <td>{{ $item + $post->firstitem() }}</td>
-                <td>{{ $result->user->name }}</td>
-                <td>{{ $result->categories->name }}</td>
-                <td>{{ $result->title }}</td>
-                <td>{{ $result->created_at }}</td>
-                <td>{{ $result->slug }} <a href="#">Read More</a></td>
+                <td>{{ $item + $category->firstitem() }}</td>
+                <td>{{ $result->name }}</td>
                 <td>
-                    <form onsubmit="return confirm('Apakah Anda Yakin Hapus Permanent?');" action="{{ route('post.delete', $result->id) }}" method="post" class="d-inline">
-                      <a href="{{ route('post.restore', $result->id) }}" class="btn btn-primary btn-sm">Restore</a>
+                    <form onsubmit="return confirm('Apakah Anda Yakin Hapus Permanent?');" action="{{ route('category.delete', $result->id) }}" method="post" class="d-inline">
+                      <a href="{{ route('category.restore', $result->id) }}" class="btn btn-primary btn-sm">Restore</a>
                       @csrf
                       @method('delete')
                       <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
                 </td>
-                </tr>
-                <tr class="expandable-body">
-                    <td colspan="15">
-                      <div class="container justify-content-lg-between d-flex">
-                        <div class="row">
-                          <div class="col-sm-4">
-                            <div class="filter-container">
-                              <div class="filtr-item col-sm-2" data-category="1" data-sort="white sample">
-                                  <a href="{{ asset('storage/' . $result->image ) }}" data-toggle="lightbox" data-title="sample 1 - white">
-                                  <img src="{{ asset('storage/' . $result->image ) }}" class="" style="width: 200px">
-                                  </a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-sm-8">
-                            <h6><strong> Deskripsi : </strong></h6>
-                            <p>
-                              {{ $result->description }}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
                 </tr>
                 @empty
                 <div class="col-md-12 mt-2 p-1">
@@ -108,14 +79,14 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  
+<!-- /.content-wrapper -->
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+  <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
 @include('template.backend.script')
-

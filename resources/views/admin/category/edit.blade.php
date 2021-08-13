@@ -146,7 +146,7 @@
       </div>
 
       <!-- Sidebar Menu -->
-      @include('layouts.admin.nav')
+      @include('template.backend.sidebar')
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

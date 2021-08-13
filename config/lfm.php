@@ -58,6 +58,12 @@ return [
                 'image/svg+xml',
                 'application/pdf',
                 'text/plain',
+                'application/pdf',
+                'application/docx',
+                'audio/mpeg',
+                'audio/mp3',
+                'video/mp4',
+                'video/mpeg',
             ],
         ],
         'image' => [

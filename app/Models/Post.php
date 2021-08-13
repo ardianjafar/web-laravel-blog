@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Post extends Model
 {
     use HasFactory;
+
     use SoftDeletes;
+    
     protected $fillable = ['title','slug','image','description','category_id','user_id'];
     
     public function categories()

@@ -21,6 +21,11 @@
 
       <!-- Default box -->
 
+      @if(session()->has('success'))
+          <div class="alert alert-success">
+            {{ session()->get('success') }}
+          </div>
+      @endif
       <div class="card">
         <div class="card-header">
           <div class="card-tools">
@@ -35,7 +40,7 @@
             </div>
           </div>
         </div>
-        
+        <!-- /.card-header -->
         <div class="card-body table-responsive p-0">
           <table class="table table-bordered table-hover">
             <thead>
@@ -43,28 +48,26 @@
                 <th>#</th>
                 <th>Penulis</th>
                 <th>Cateogry</th>
-                <th>Title</th>
                 <th>Created at</th>
-                <th></th>
+                <th>Title</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-                @forelse ($post as $item => $result)   
+            @foreach ($posts as $item => $hasil)    
                 <tr data-widget="expandable-table" aria-expanded="false">
-                <td>{{ $item + $post->firstitem() }}</td>
-                <td>{{ $result->user->name }}</td>
-                <td>{{ $result->categories->name }}</td>
-                <td>{{ $result->title }}</td>
-                <td>{{ $result->created_at }}</td>
-                <td>{{ $result->slug }} <a href="#">Read More</a></td>
+                <td>{{ $item + $posts->firstitem() }}</td>
+                <td>{{ $hasil->user->name }}</td>
+                <td>{{ $hasil->categories->name }}</td>
+                <td>{{ $hasil->created_at }}</td>
+                <td>{{ $hasil->slug }} <a href="#">Read More</a></td>
                 <td>
-                    <form onsubmit="return confirm('Apakah Anda Yakin Hapus Permanent?');" action="{{ route('post.delete', $result->id) }}" method="post" class="d-inline">
-                      <a href="{{ route('post.restore', $result->id) }}" class="btn btn-primary btn-sm">Restore</a>
-                      @csrf
-                      @method('delete')
-                      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
+                  <form action="{{ route('post.destroy', $hasil->id) }}" method="post" class="d-inline">
+                    <a href="{{ route('post.edit', $hasil->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                    @csrf
+                    @method('delete')
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                  </form>
                 </td>
                 </tr>
                 <tr class="expandable-body">
@@ -74,8 +77,8 @@
                           <div class="col-sm-4">
                             <div class="filter-container">
                               <div class="filtr-item col-sm-2" data-category="1" data-sort="white sample">
-                                  <a href="{{ asset('storage/' . $result->image ) }}" data-toggle="lightbox" data-title="sample 1 - white">
-                                  <img src="{{ asset('storage/' . $result->image ) }}" class="" style="width: 200px">
+                                  <a href="{{ asset('storage/' . $hasil->image ) }}" data-toggle="lightbox" data-title="sample 1 - white">
+                                    <img src="{{ asset('storage/' . $hasil->image ) }}" class="" style="width: 200px">
                                   </a>
                               </div>
                             </div>
@@ -83,20 +86,18 @@
                           <div class="col-sm-8">
                             <h6><strong> Deskripsi : </strong></h6>
                             <p>
-                              {{ $result->description }}
+                              {!! 
+                              
+                              $hasil->description 
+                              
+                              !!}
                             </p>
                           </div>
                         </div>
                       </div>
                     </td>
                 </tr>
-                @empty
-                <div class="col-md-12 mt-2 p-1">
-                  <div class="alert alert-danger" role="alert">
-                    You don't have data trashed
-                  </div>               
-                </div>
-                @endforelse
+            @endforeach
             </tbody>
           </table>
         </div>
