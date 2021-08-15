@@ -1,6 +1,10 @@
 <?php
 
-use App\Http\Controllers\{CategoryController, DashboardController,LocalizationController};
+use App\Http\Controllers\{  CategoryController,
+                            DashboardController,
+                            LocalizationController,
+                            TagController,
+                        };
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,10 +25,18 @@ Auth::routes([
 Route::group(['prefix' => 'dashboard', 'middleware' => ['web','auth']], function(){
     // Dashboard
     Route::get('/', [DashboardController::class,'index'])->name('dashboard.index');
-    // Categories
+    /*
+        Categories -> CRUD -> CATEGORIES
+    */
     Route::get('/categories/select', [CategoryController::class,'select'])->name('categories.select');
     Route::resource('/categories', CategoryController::class);
-    // laravel filemanager
+    /*
+        Tags -> CRUD -> TAGS
+    */
+    Route::resource('/tags', TagController::class);
+    /*
+        Laravel FileManager
+    */
     Route::group(['prefix' => 'filemanager'], function () {
         \UniSharp\LaravelFilemanager\Lfm::routes();
     });

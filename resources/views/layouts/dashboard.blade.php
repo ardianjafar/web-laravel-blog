@@ -14,6 +14,8 @@
    <script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}"></script>
    <!-- icon flag -->
    <link rel="stylesheet" href="{{ asset('vendor/flag-icon-css/css/flag-icon.min.css') }}">
+   {{-- css:internal --}}
+   @stack('css-internal')
    {{-- css:external --}}
    @stack('css-external')
 </head>
@@ -58,6 +60,7 @@
    @include('sweetalert::alert')
    {{-- javascript:external --}}
    @stack('javascript-external')
+   {{-- javascript:internal --}}
    @stack('javascript-internal')
 </body>
 
