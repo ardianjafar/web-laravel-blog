@@ -4,6 +4,7 @@ use App\Http\Controllers\{  CategoryController,
                             DashboardController,
                             LocalizationController,
                             TagController,
+                            PostController
                         };
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -31,9 +32,14 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['web','auth']], function
     Route::get('/categories/select', [CategoryController::class,'select'])->name('categories.select');
     Route::resource('/categories', CategoryController::class);
     /*
-        Tags -> CRUD -> TAGS
+    Tags -> CRUD -> TAGS
     */
-    Route::resource('/tags', TagController::class);
+    Route::get('/tags/select', [TagController::class,'select'])->name('tags.select');
+    Route::resource('/tags', TagController::class)->except(['show']);
+    /*
+        Posts -> CRUD
+    */
+    Route::resource('/posts', PostController::class);
     /*
         Laravel FileManager
     */

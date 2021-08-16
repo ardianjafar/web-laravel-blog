@@ -16,10 +16,10 @@
           <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
-                   <form action="" method="GET">
+                   <form action="{{ route('tags.index') }}" method="GET">
                       <div class="input-group">
                          <input name="keyword" type="search" class="form-control"
-                         placeholder="{{ trans('tags.form_control.input.search.placeholder') }}">
+                         placeholder="{{ trans('tags.form_control.input.search.placeholder') }}" value="{{ request()->get('keyword') }}">
                          <div class="input-group-append">
                             <button class="btn btn-primary" type="submit">
                                <i class="fas fa-search"></i>
@@ -48,11 +48,14 @@
                             </label>
                             <div>
                             <!-- edit -->
-                            <a class="btn btn-sm btn-info" role="button">
+                            <a href="{{ route('tags.edit', ['tag' => $tag]) }}" class="btn btn-sm btn-info" role="button">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <!-- delete -->
-                            <form class="d-inline" action="" method="POST">
+                            <form class="d-inline" action="{{ route('tags.destroy', ['tag' => $tag]) }}" role="alert" method="POST"
+                            alert-text="{{ trans('tags.alert.delete.message.confirm', ['title' => $tag->title]) }}">
+                            @csrf
+                            @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">
                                 <i class="fas fa-trash"></i>
                                 </button>
@@ -63,13 +66,47 @@
                 @else
                     <p>
                         <strong>
-                            {{ trans('tags.label.no_data.fetch') }}
+                            @if (request()->get('keyword'))
+                                {{ trans('tags.label.no_data.search',['keyword' => request()->get('keyword')]) }}
+                            @else
+                                {{ trans('tags.label.no_data.fetch') }}
+                            @endif
                         </strong>
                     </p>
                 @endif
              </ul>
           </div>
+          @if ($tags->hasPages())
+                <div class="card-footer">
+                    {{ $tags->links('vendor.pagination.bootstrap-4') }}
+                </div>
+          @endif
        </div>
     </div>
  </div>
 @endsection
+
+
+@push('javascript-internal')
+    <script>
+        $(document).ready(function(event) {
+            $("form[role='alert']").submit(function (event) {
+            event.preventDefault();
+            Swal.fire({
+            title: "{{ trans('tags.alert.delete.title') }}",
+            text: $(this).attr('alert-text'),
+            icon: 'warning',
+            allowOutsideClick: false,
+            showCancelButton: true,
+            cancelButtonText: "{{ trans('tags.button.cancel.value') }}",
+            reverseButtons: true,
+            confirmButtonText: "{{ trans('tags.button.delete.value') }}",
+            }).then((result) => {
+            if (result.isConfirmed) {
+                    event.target.submit();
+               }
+             });
+           });
+        });
+    </script>
+@endpush

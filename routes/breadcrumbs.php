@@ -89,6 +89,32 @@ Breadcrumbs::for('add_tag', function (BreadcrumbTrail $trail) {
     $trail->parent('tags');
     $trail->push('Add', route('tags.create'));
 });
+/*
+    Dashboard -> Tags -> title -> Edit
+*/
+Breadcrumbs::for('edit_tag', function (BreadcrumbTrail $trail, $tag) {
+    $trail->parent('tags');
+    $trail->push('Edit', route('tags.edit', ['tag' => $tag]));
+    $trail->push($tag->title, route('tags.edit', ['tag' => $tag]));
+});
+
+/*
+            -> === === === === === === Post === === === === === === <-
+*/
+/*
+    Dashboard -> Post
+*/
+Breadcrumbs::for('posts', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Posts', route('posts.index'));
+});
+/*
+    Dashboard -> Tags -> title
+*/
+Breadcrumbs::for('add_post', function (BreadcrumbTrail $trail) {
+    $trail->parent('posts');
+    $trail->push('Add', route('posts.create'));
+});
 // Home > Blog
 // Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {
 //     $trail->parent('home');

@@ -13,10 +13,28 @@ class TagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    private $perPage = 10;
+    public function index(Request $request)
     {
-        $tags = Tag::all();
-        return view('tags.index', compact('tags'));
+        $tags = $request->get('keyword')
+            ? Tag::search($request->keyword)->paginate($this->perPage)
+            : Tag::paginate($this->perPage);
+        return view('tags.index',[
+            'tags'  =>  $tags->appends(['keyword' => $request->keyword])
+        ]);
+    }
+
+    public function select(Request $request)
+    {
+        $tags = [];
+        if($request->has('q')) {
+            $tags = Tag::select('id','title')->search($request->q)->get();
+        } else {
+            $tags = Tag::select('id','title')->limit(5)->get();
+        }
+
+        return response()->json($tags);
     }
 
     /**
@@ -88,7 +106,7 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        //
+        return view('tags.edit', compact('tag'));
     }
 
     /**
@@ -100,7 +118,36 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
-        //
+        Validator::make(
+            $request->all(),
+            [
+                'title'     => ['required','string','max:25'],
+                'slug'      => ['required','string','unique:tags,slug, ' . $tag->id]
+            ],[
+
+            ],
+            $this->getAttributes(),
+        )->validate();
+
+        try {
+            $tag->update([
+                'title'     => $request->title,
+                'slug'      => $request->slug
+            ]);
+
+            Alert::success(
+                trans('tags.alert.update.title'),
+                trans('tags.alert.update.message.success')
+            );
+
+            return redirect()->route('tags.index');
+        } catch (\Throwable $th) {
+            Alert::error(
+                trans('tags.alert.update.title'),
+                trans('tags.alert.update.message.error', ['error' => $th->getMessage()]),
+            );
+            return redirect()->back()->withInput($request->all());
+        }
     }
 
     /**
@@ -111,7 +158,20 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        // dd($tag);
+        try {
+            $tag->delete();
+            Alert::success(
+                trans('tags.alert.delete.title'),
+                trans('tags.alert.delete.message.success')
+            );
+        } catch (\Throwable $th) {
+            Alert::error(
+                trans('tags.alert.delete.title'),
+                trans('tags.alert.delete.message.error', ['error' => $th->getMessage()]),
+            );
+        }
+        return redirect()->back();
     }
 
     public function getAttributes()
@@ -121,4 +181,6 @@ class TagController extends Controller
             'slug' => trans('tags.form_control.input.slug.attribute')
         ];
     }
+
+    
 }
