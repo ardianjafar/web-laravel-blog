@@ -17,10 +17,18 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::all();
-        return view('posts.index', compact('posts'));
+        $statusSelected = in_array($request->get('status'),['publish','draft']) ? $request->get('status') : "publish";
+        $posts = $statusSelected == "publish" ? Post::publish() : Post::draft();
+        if($request->get('keyword')){
+            $posts->search($request->get('keyword'));
+        }
+        return view('posts.index', [
+            'posts'         => $posts->paginate(10)->withQueryString(),
+            'statuses'      => $this->statuses(),
+            'statusSelected'=> $statusSelected
+        ]);
     }
 
     /**
@@ -112,7 +120,9 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        $categories = $post->categories;
+        $tags = $post->tags;
+        return view('posts.detail', compact('post','categories','tags'));
     }
 
     /**
@@ -123,7 +133,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('posts.edit', [
+            'post'  => $post,
+            'categories'    => Category::with('descendants')->onlyParent()->get(),
+            'statuses'      => $this->statuses(),
+        ]);
     }
 
     /**
@@ -135,7 +149,64 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "title"         => ['required','string','max:60'],
+                "slug"          => ['required','string','unique:posts,slug,' . $post->id],
+                "thumbnail"     => ['required'],
+                "description"   => ['required','string','max:240'],
+                "content"       => ['required'],
+                "category"      => ['required'],
+                "tag"           => ['required'],
+                "status"        => ['required'],
+            ],
+            [],
+            $this->attributes()
+        );
+
+        if($validator->fails()){
+            if($request['tag']){
+                $request['tag'] = Tag::select('id','title')->whereIn('id', $request->tag)->get();
+            }
+            return redirect()->back()->withInput($request->all())->withErrors($validator);
+        }
+
+        DB::beginTransaction();
+        try {
+            $post->update([
+                'title'         => $request->title,
+                'slug'          => $request->slug,
+                'thumbnail'     => parse_url($request->thumbnail)['path'],
+                'description'   => $request->description,
+                'content'       => $request->content,
+                'status'        => $request->status,
+                'user_id'       => Auth::user()->id
+            ]);
+
+            $post->tags()->sync($request->tag);
+            $post->categories()->sync($request->category);
+
+            Alert::success(
+                trans('posts.alert.update.title'),
+                trans('posts.alert.update.message.success')
+            );
+
+            return redirect()->route('posts.index');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Alert::error(
+                trans('posts.alert.update.title'),
+                trans('posts.alert.update.message.error',['error' => $th->getMessage()])
+            );
+
+            if($request['tag']){
+                $request['tag'] = Tag::select('id','title')->whereIn('id', $request->tag)->get();
+            }
+            return redirect()->back()->withInput($request->all());
+        } finally {
+            DB::commit();
+        }
     }
 
     /**
@@ -146,7 +217,28 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+
+        DB::beginTransaction();
+        try {
+            $post->tags()->detach();
+            $post->categories()->detach();
+            $post->delete();
+
+            Alert::success(
+                trans('posts.alert.delete.title'),
+                trans('posts.alert.delete.message.success')
+            );
+            return redirect()->route('posts.index');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Alert::error(
+                trans('posts.alert.delete.title'),
+                trans('posts.alert.delete.message.error',['error' => $th->getMessage()])
+            );
+        } finally {
+            DB::commit();
+            return redirect()->back();
+        }
     }
 
     private function statuses()

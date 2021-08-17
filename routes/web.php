@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\{  CategoryController,
                             DashboardController,
+                            FileManagerController,
                             LocalizationController,
                             TagController,
-                            PostController
-                        };
+                            PostController,
+    RoleController
+};
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,6 +46,12 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['web','auth']], function
         Laravel FileManager
     */
     Route::group(['prefix' => 'filemanager'], function () {
+        Route::get('/index',[FileManagerController::class,'index'])->name('filemanager.index');
         \UniSharp\LaravelFilemanager\Lfm::routes();
     });
+
+    /*
+        Role Permission
+    */
+    Route::resource('/roles', RoleController::class);
 });

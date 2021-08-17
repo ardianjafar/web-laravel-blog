@@ -115,6 +115,63 @@ Breadcrumbs::for('add_post', function (BreadcrumbTrail $trail) {
     $trail->parent('posts');
     $trail->push('Add', route('posts.create'));
 });
+/*
+    Dashboard -> Posts -> title -> Detail
+*/
+Breadcrumbs::for('detail_post', function (BreadcrumbTrail $trail, $post) {
+    $trail->parent('posts');
+    $trail->push('Detail', route('posts.show', ['post' => $post]));
+    $trail->push($post->title, route('posts.show', ['post' => $post]));
+});
+/*
+    Dashboard -> Posts -> Edit
+*/
+Breadcrumbs::for('edit_post', function (BreadcrumbTrail $trail, $post) {
+    $trail->parent('posts');
+    $trail->push('Edit', route('posts.edit', ['post' => $post]));
+    $trail->push($post->title, route('posts.edit', ['post' => $post]));
+});
+
+
+/*
+            -> === === === === === === FileManager === === === === === === <-
+*/
+/*
+    Dashboard -> FileManager
+*/
+Breadcrumbs::for('file_manager', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('File Manager', route('filemanager.index'));
+});
+/*
+            -> === === === === === === Roles === === === === === === <-
+*/
+/*
+    Dashboard -> RolePermission
+*/
+Breadcrumbs::for('roles', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Roles', route('roles.index'));
+});
+
+/*
+    Dashboard -> RolePermission -> Create
+*/
+Breadcrumbs::for('add_role', function (BreadcrumbTrail $trail) {
+    $trail->parent('roles');
+    $trail->push('Add', route('roles.create'));
+});
+
+/*
+    Dashboard -> Role -> Detail
+*/
+Breadcrumbs::for('detail_role', function (BreadcrumbTrail $trail, $role) {
+    $trail->parent('roles');
+    $trail->push('Detail', route('roles.show', ['role' => $role]));
+    $trail->push($role->name, route('roles.show', ['role' => $role]));
+});
+
+
 // Home > Blog
 // Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {
 //     $trail->parent('home');
