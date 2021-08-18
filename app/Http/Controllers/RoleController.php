@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +12,16 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    private $perPage = 3;
+
+    public function __construct()
+    {
+        $this->middleware('permission:role_show',['only' => 'index']);
+        $this->middleware('permission:role_create',['only' => ['create','store']]);
+        $this->middleware('permission:role_update',['only' => ['edit','update']]);
+        $this->middleware('permission:role_detail',['only' => 'show']);
+        $this->middleware('permission:role_destroy',['only' => 'destroy']);
+    }
+    private $perPage = 10;
     /**
      * Display a listing of the resource.
      *
@@ -179,6 +190,14 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        // Validasi
+        if(User::role($role->name)->count()){
+            Alert::warning(
+                trans('roles.alert.delete.title'),
+                trans('roles.alert.delete.message.warning', ['name' => $role->name])
+            );
+            return redirect()->back();
+        }
         DB::beginTransaction();
         try{
             $role->revokePermissionTo($role->permissions->pluck('name')->toArray());

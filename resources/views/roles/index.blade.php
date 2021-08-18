@@ -29,10 +29,12 @@
                    </form>
                 </div>
                 <div class="col-md-6">
-                   <a href="{{ route('roles.create') }}" class="btn btn-primary float-right" role="button">
-                      {{ trans('roles.button.create.value') }}
-                      <i class="fas fa-plus-square"></i>
-                   </a>
+                    @can('role_create')
+                        <a href="{{ route('roles.create') }}" class="btn btn-primary float-right" role="button">
+                            {{ trans('roles.button.create.value') }}
+                            <i class="fas fa-plus-square"></i>
+                        </a>
+                    @endcan
                 </div>
              </div>
           </div>
@@ -47,14 +49,19 @@
                             </label>
                         <div>
                             <!-- detail -->
+                            @can('role_detail')
                             <a href="{{ route('roles.show', ['role' => $role]) }}" class="btn btn-sm btn-primary" role="button">
                                 <i class="fas fa-eye"></i>
                             </a>
+                            @endcan
                             <!-- edit -->
+                            @can('role_update')
                             <a href="{{ route('roles.edit', ['role' => $role]) }}" class="btn btn-sm btn-info" role="button">
                                 <i class="fas fa-edit"></i>
                             </a>
+                            @endcan
                             <!-- delete -->
+                            @can('role_delete')
                             <form class="d-inline" action="{{ route('roles.destroy', ['role' => $role]) }}" role="alert" method="POST"
                                 alert-text="{{ trans('roles.alert.delete.message.confirm', ['name' => $role->name]) }}">
                                 @csrf
@@ -62,7 +69,8 @@
                                     <button type="submit" class="btn btn-sm btn-danger">
                                     <i class="fas fa-trash"></i>
                                     </button>
-                                </form>
+                            </form>
+                            @endcan
                         </div>
                     </li>
                 @empty

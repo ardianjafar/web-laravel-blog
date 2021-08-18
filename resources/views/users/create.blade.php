@@ -34,6 +34,7 @@
                       {{ trans('users.form_control.select.role.label') }}
                    </label>
                    <select id="select_user_role" name="role" data-placeholder="{{ trans('users.form_control.select.role.placeholder') }}" class="custom-select w-100 @error('role') is-invalid @enderror">
+
                         @if (old('role'))
                             <option value="{{ old('role')->id }}" selected>
                                 {{ old('role')->name }}

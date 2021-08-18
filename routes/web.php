@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{  CategoryController,
+use App\Http\Controllers\{BlogController, CategoryController,
                             DashboardController,
                             FileManagerController,
                             LocalizationController,
@@ -16,9 +16,11 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/localization/{language}',[LocalizationController::class,'switch'])->name('localization.switch');
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [BlogController::class,'home'])->name('blog.home');
 
 
 Auth::routes([
@@ -59,5 +61,5 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['web','auth']], function
     /*
         User Permission
     */
-    Route::resource('/users', UserController::class);
+    Route::resource('/users', UserController::class)->except('show');
 });

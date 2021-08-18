@@ -13,15 +13,31 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:user_show',['only' => 'index']);
+        $this->middleware('permission:user_create',['only' => ['create','store']]);
+        $this->middleware('permission:user_update',['only' => ['edit','update']]);
+        $this->middleware('permission:user_detail',['only' => 'show']);
+        $this->middleware('permission:user_destroy',['only' => 'destroy']);
+    }
+    private $perPage = 10;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $user = [];
+        if($request->has('keyword')){
+            $user = User::search($request->keyword)->paginate($this->perPage);
+        }else {
+            $user = User::paginate($this->perPage);
+        }
         return view('users.index',[
-            'users' => User::all(),
+            'users' => $user->appends(['keyword' => $request->keyword]),
         ]);
     }
 
@@ -114,7 +130,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('users.edit',[
+            'user' => $user,
+            'userSelected' => $user->roles->first()
+        ]);
     }
 
     /**
@@ -126,7 +145,45 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'role'      => ['required'],
+            ],
+            [],
+            $this->attributes()
+        );
+
+        if($validator->fails()){
+            $request['role']  = Role::select('id','name')->find($request->role);
+            return redirect()
+            ->back()
+            ->withInput($request->all())
+            ->withErrors($validator);
+        }
+
+        DB::beginTransaction();
+        try {
+            $user->syncRoles($request->role);
+            Alert::success(
+                trans('users.alert.update.title'),
+                trans('users.alert.update.message.success')
+                );
+            return redirect()->route('users.index');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Alert::error(
+                trans('users.alert.update.title'),
+                trans('users.alert.update.message.error', ['error' => $th->getMessage()])
+                );
+            $request['role']  = Role::select('id','name')->find($request->role);
+            return redirect()
+            ->back()
+            ->withInput($request->all())
+            ->withErrors($validator);
+        } finally {
+            DB::commit();
+        }
     }
 
     /**
@@ -137,7 +194,24 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-
+        DB::beginTransaction();
+        try {
+            $user->removeRole($user->roles->first());
+            $user->delete();
+            Alert::success(
+                trans('users.alert.delete.title'),
+                trans('users.alert.delete.message.success')
+                );
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Alert::error(
+                trans('users.alert.delete.title'),
+                trans('users.alert.delete.message.error', ['error' => $th->getMessage()])
+                );
+        } finally {
+            DB::commit();
+            return  redirect()->back();
+        }
     }
 
     private function attributes()

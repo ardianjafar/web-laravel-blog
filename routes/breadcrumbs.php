@@ -195,6 +195,14 @@ Breadcrumbs::for('add_user', function (BreadcrumbTrail $trail) {
     $trail->parent('users');
     $trail->push('Add', route('users.create'));
 });
+/*
+    Dashboard -> Role -> Detail
+*/
+Breadcrumbs::for('edit_user', function (BreadcrumbTrail $trail, $user) {
+    $trail->parent('users');
+    $trail->push('Edit', route('users.edit', ['user' => $user]));
+    $trail->push($user->name, route('users.edit', ['user' => $user]));
+});
 
 // Home > Blog
 // Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {
