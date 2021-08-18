@@ -170,7 +170,31 @@ Breadcrumbs::for('detail_role', function (BreadcrumbTrail $trail, $role) {
     $trail->push('Detail', route('roles.show', ['role' => $role]));
     $trail->push($role->name, route('roles.show', ['role' => $role]));
 });
-
+/*
+    Dashboard -> Role -> Detail
+*/
+Breadcrumbs::for('edit_role', function (BreadcrumbTrail $trail, $role) {
+    $trail->parent('roles');
+    $trail->push('Edit', route('roles.edit', ['role' => $role]));
+    $trail->push($role->name, route('roles.edit', ['role' => $role]));
+});
+/*
+            -> === === === === === === users === === === === === === <-
+*/
+/*
+    Dashboard -> RolePermission
+*/
+Breadcrumbs::for('users', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('User', route('users.index'));
+});
+/*
+    Dashboard -> RolePermission -> Create
+*/
+Breadcrumbs::for('add_user', function (BreadcrumbTrail $trail) {
+    $trail->parent('users');
+    $trail->push('Add', route('users.create'));
+});
 
 // Home > Blog
 // Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {

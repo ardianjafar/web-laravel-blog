@@ -6,7 +6,8 @@ use App\Http\Controllers\{  CategoryController,
                             LocalizationController,
                             TagController,
                             PostController,
-    RoleController
+                            RoleController,
+                            UserController
 };
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -53,5 +54,10 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['web','auth']], function
     /*
         Role Permission
     */
+    Route::get('/roles/select',[RoleController::class,'select'])->name('roles.select');
     Route::resource('/roles', RoleController::class);
+    /*
+        User Permission
+    */
+    Route::resource('/users', UserController::class);
 });
