@@ -16,7 +16,7 @@ Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
 });
 
 /*
-    Home -> Blog
+    Home
 */
 Breadcrumbs::for('dashboard_home', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
@@ -50,10 +50,10 @@ Breadcrumbs::for('edit_category', function (BreadcrumbTrail $trail, $category) {
 /*
     Dashboard -> Categories -> Title
 */
-Breadcrumbs::for('edit_category_title', function (BreadcrumbTrail $trail, $category) {
-    $trail->parent('edit_category');
-    $trail->push('Edit', route('categories.edit', ['category' => $category]));
-});
+// Breadcrumbs::for('edit_category_title', function (BreadcrumbTrail $trail, $category) {
+//     $trail->parent('edit_category');
+//     $trail->push('Edit', route('categories.edit', ['category' => $category]));
+// });
 
 /*
     Dashboard -> Categories -> Detail
@@ -204,15 +204,48 @@ Breadcrumbs::for('edit_user', function (BreadcrumbTrail $trail, $user) {
     $trail->push($user->name, route('users.edit', ['user' => $user]));
 });
 
-// Home > Blog
-// Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {
-//     $trail->parent('home');
-//     $trail->push('Blog', route('blog'));
-// });
+// Halaman Blog
+Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {
+    $trail->push('Blog', route('blog.home'));
+});
+// Blog -> Home
+Breadcrumbs::for('blog_home', function($trail){
+    $trail->parent('blog');
+    $trail->push('Home', route('blog.home'));
+});
+// Blog -> Posts -> ['title']
+Breadcrumbs::for('blog_post', function($trail, $title){
+    $trail->parent('blog');
+    $trail->push($title, '#');
+});
+// Blog -> Categories
+Breadcrumbs::for('blog_categories', function($trail){
+    $trail->parent('blog');
+    $trail->push('Categories', route('blog.categories'));
+});
+// Blog -> Categories -> title
+Breadcrumbs::for('blog_posts_category', function($trail, $title){
+    $trail->parent('blog');
+    $trail->push('Categories', route('blog.categories'));
+    $trail->push($title, '#');
+});
 
-// Home > Blog > [Category]
-// Breadcrumbs::for('category', function (BreadcrumbTrail $trail, $category) {
-//     $trail->parent('blog');
-//     $trail->push($category->title, route('category', $category));
-// });
+// Blog -> Search
+Breadcrumbs::for('blog_tags', function($trail){
+    $trail->parent('blog');
+    $trail->push('Tags', route('blog.tags'));
+});
+// Blog -> Tags
+Breadcrumbs::for('blog_search', function($trail, $keyword){
+    $trail->parent('blog');
+    $trail->push('Search', route('blog.search', ['keyword' => $keyword]));
+    $trail->push($keyword, route('blog.search', ['keyword' => $keyword]));
+});
+
+// Blog -> Tags -> title
+Breadcrumbs::for('blog_posts_tag', function($trail, $title){
+    $trail->parent('blog');
+    $trail->push('Tagss', route('blog.tags'));
+    $trail->push($title, '#');
+});
 ?>

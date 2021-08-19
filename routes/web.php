@@ -21,6 +21,12 @@ Route::get('/localization/{language}',[LocalizationController::class,'switch'])-
 // });
 
 Route::get('/', [BlogController::class,'home'])->name('blog.home');
+Route::get('/post/{slug}', [BlogController::class,'showPostDetail'])->name('blog.post.detail');
+Route::get('/categories', [BlogController::class,'showCategories'])->name('blog.categories');
+Route::get('/categories/{slug}', [BlogController::class,'showPostsByCategory'])->name('blog.posts.category');
+Route::get('/tags', [BlogController::class,'showTags'])->name('blog.tags');
+Route::get('/tags/{slug}', [BlogController::class,'showPostsByTag'])->name('blog.posts.tags');
+Route::get('/search', [BlogController::class,'searchPosts'])->name('blog.search');
 
 
 Auth::routes([
